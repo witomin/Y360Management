@@ -14,7 +14,7 @@ namespace Y360Management {
             base.EndProcessing();
         }
     }
-    [Cmdlet(VerbsCommon.Set, "Status2FA"), OutputType(typeof(DomainStatus2FA))]
+    [Cmdlet(VerbsCommon.Set, "Status2FA")]
     public class SetStatus2FaCmdlet : PSCmdlet {
         /// <summary>
         /// Период (в секундах), в течение которого при включенной 2FA пользователю в процессе авторизации
@@ -39,18 +39,11 @@ namespace Y360Management {
             var APIClient = Helpers.GetApiClient(this);
             DomainStatus2FA result;
             if (Duration != null) {
-                result = APIClient.Enable2faAsync(new EnableDomainStatus2FA { duration = (int)Duration, logoutUsers = LogoutUsers}).Result;
-                if (result.enabled) {
-                    WriteObject("Выполнено успешно");
-                }
-                
+                result = APIClient.Enable2faAsync(new EnableDomainStatus2FA { duration = (int)Duration, logoutUsers = LogoutUsers}).Result; 
             }
             else 
             if (Disable) {
                 result = APIClient.Disable2faAsync().Result;
-                if (!result.enabled) {
-                    WriteObject("Выполнено успешно");
-                }
             }
             base.EndProcessing();
         }
