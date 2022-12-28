@@ -54,4 +54,54 @@ namespace Y360Management {
             base.EndProcessing();
         }
     }
+    /// <summary>
+    /// Создать новую группу.
+    /// </summary>
+    [Cmdlet(VerbsCommon.New, "Group"), OutputType(typeof(Group))]
+    public class NewGroupCmdlet : PSCmdlet {
+        /// <summary>
+        /// Обязательный параметр Название группы
+        /// </summary>
+        [Parameter(Position = 0, Mandatory = true)]
+        public string Name { get; set; }
+        /// <summary>
+        /// Описание группы
+        /// </summary>
+        [Parameter(Position = 1)]
+        public string? Description { get; set; }
+        /// <summary>
+        /// Произвольный внешний идентификатор группы
+        /// </summary>
+        [Parameter(Position = 2)]
+        public string? ExternalId { get; set; }
+        /// <summary>
+        /// Имя почтовой рассылки группы. Например, для адреса new-group@ваш-домен.ru имя почтовой рассылки — это new-group
+        /// </summary>
+        [Parameter(Position = 3)]
+        public string? Label { get; set; }
+        /// <summary>
+        /// Идентификаторы руководителей группы
+        /// </summary>
+        [Parameter(Position = 4)]
+        public List<ulong>? AdminIds { get; set; }
+        /// <summary>
+        /// Участники группы
+        /// </summary>
+        [Parameter(Position = 5)]
+        public List<Member>? Members { get; set; }
+        protected override void EndProcessing() {
+            var APIClient = Helpers.GetApiClient(this);
+            BaseGroup newGroup = new BaseGroup {
+                adminIds = AdminIds,
+                description = Description,
+                externalId = ExternalId,
+                label = Label,
+                name = Name,
+                members = Members
+            };
+            var result = APIClient.AddGroupAsync(newGroup).Result;
+            WriteObject(result);
+            base.EndProcessing();
+        }
+    }
 }
