@@ -1,6 +1,6 @@
 # Y360Management
 Модуль PowerShell для управления Яндекс 360 для бизнеса
-На основе бублиотеки https://github.com/witomin/Yandex.API360
+На основе библиотеки https://github.com/witomin/Yandex.API360
 
 Командлеты:
 
