@@ -161,8 +161,8 @@ namespace Y360Management {
 
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            List<Group> groups = APIClient.GetAllGroupsAsync().Result;
-            Group group = groups.SingleOrDefault(u => u.id.ToString().Equals(Identity) || u.name.ToLower().Equals(Identity.ToLower()) || u.email.ToLower().Equals(Identity.ToLower()));
+            allGroups = APIClient.GetAllGroupsAsync().Result;
+            Group group = allGroups.SingleOrDefault(u => u.id.ToString().Equals(Identity) || u.name.ToLower().Equals(Identity.ToLower()) || u.email.ToLower().Equals(Identity.ToLower()));
             if (group == null) {
                 base.EndProcessing();
                 return;
@@ -170,7 +170,6 @@ namespace Y360Management {
 
             if (Members != null || MemberList != null || Admins != null || AdminList != null) {
                 allUsers = APIClient.GetAllUsersAsync().Result;
-                allGroups = APIClient.GetAllGroupsAsync().Result;
                 allDepartments = APIClient.GetAllDepartmentsAsync().Result;
             }
             if (Name != null) group.name = Name;
