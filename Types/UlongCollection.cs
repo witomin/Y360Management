@@ -2,16 +2,16 @@
 
 namespace Y360Management.Types {
     /// <summary>
-    /// Коллекция значений для управления белым списком
+    /// Класс для управления коллекциями
     /// </summary>
-    public class AloowListCollection {
+    public class UlongCollection {
         /// <summary>
         /// Списко элементов, которые требуется добавить
         /// </summary>
-        public List<string> Add { get; set; }
+        public List<ulong> Add { get; set; }
         /// <summary>
         /// Списко элементов, которые требуется удалить
         /// </summary>
-        public List<string> Remove { get; set; }
+        public List<ulong> Remove { get; set; }
     }
 }

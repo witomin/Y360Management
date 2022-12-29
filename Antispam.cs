@@ -23,7 +23,7 @@ namespace Y360Management {
     [Cmdlet(VerbsCommon.Set, "AllowList")]
     public class SetAllowListCmdlet : PSCmdlet {
         [Parameter(Position = 0)]
-        public AloowListCollection? Items { get; set; }
+        public StringCollection? Items { get; set; }
         [Parameter(Position = 1)]
         public List<string>? AllowList { get; set; }
         protected override void EndProcessing() {
