@@ -81,10 +81,10 @@ namespace Y360Management {
         [Parameter(Position = 3)]
         public string? Label { get; set; }
         /// <summary>
-        /// Идентификаторы руководителей группы
+        /// Руководители группы
         /// </summary>
         [Parameter(Position = 4)]
-        public List<ulong>? AdminIds { get; set; }
+        public List<string>? Admins { get; set; }
         /// <summary>
         /// Участники группы
         /// </summary>
@@ -92,13 +92,13 @@ namespace Y360Management {
         public List<string>? Members { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            if (Members != null) {
+            if (Members != null || Admins!=null) {
                 Helpers.allUsers = APIClient.GetAllUsersAsync().Result;
                 Helpers.allGroups = APIClient.GetAllGroupsAsync().Result;
                 Helpers.allDepartments = APIClient.GetAllDepartmentsAsync().Result;
             }
             BaseGroup newGroup = new BaseGroup {
-                adminIds = AdminIds,
+                adminIds = Admins is null ? null : Helpers.GetMembersByIdentityList(Admins).Select(a=>a.id).ToList(),
                 description = Description,
                 externalId = ExternalId,
                 label = Label,
@@ -153,12 +153,12 @@ namespace Y360Management {
         /// Параметр для удаления или добавления администраторов группы (нельзя использовать совместно с параметром AdminList)
         /// </summary>
         [Parameter(Position = 6)]
-        public UlongCollection? Admins { get; set; }
+        public StringCollection? Admins { get; set; }
         /// <summary>
         /// Параметр для замены всего списка администраторов группы (нельзя использовать совместно с параметром Admins)
         /// </summary>
         [Parameter(Position = 7)]
-        public List<ulong>? AdminList { get; set; }
+        public List<string>? AdminList { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
             Helpers.allGroups = APIClient.GetAllGroupsAsync().Result;
@@ -195,15 +195,16 @@ namespace Y360Management {
                 }
             }
             if (AdminList != null) {
-                group.adminIds = AdminList;
+                group.adminIds = AdminList is null ? null : Helpers.GetMembersByIdentityList(AdminList).Select(a => a.id).ToList();
             }
             else if (Admins != null) {
                 if (Admins.Add != null) {
-                    group.adminIds.AddRange(Admins.Add);
+                    group.adminIds.AddRange(Helpers.GetMembersByIdentityList(Admins.Add).Select(a => a.id).ToList());
                     group.adminIds.Distinct();
                 }
                 if (Admins.Remove != null) {
-                    group.adminIds = group.adminIds.Where(a => !Admins.Remove.Contains(a)).ToList();
+                    var removable = Helpers.GetMembersByIdentityList(Admins.Remove).Select(a=>a.id);
+                    group.adminIds = group.adminIds.Where(m => !removable.Contains(m)).ToList();
                 }
             }
             //!!!!!!!!!!
