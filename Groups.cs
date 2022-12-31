@@ -218,4 +218,23 @@ namespace Y360Management {
             base.EndProcessing();
         }
     }
+    [Cmdlet(VerbsCommon.Remove, "Group"), OutputType(typeof(List<Group>))]
+    public class RemoveGroupCmdlet : PSCmdlet {
+        /// <summary>
+        /// Параметр Identity определяет группу, которую требуется просмотреть.
+        /// Можно использовать любое значение, которое однозначно определяет пользователя:
+        /// - Id
+        /// - name
+        /// - email
+        /// </summary>
+        [Parameter(Position = 0, Mandatory = true)]
+        public string Identity { get; set; }
+        protected override void EndProcessing() {
+            var APIClient = Helpers.GetApiClient(this);
+            List<Group> allGroups = APIClient.GetAllGroupsAsync().Result;
+            Group group = allGroups.SingleOrDefault(u => u.id.ToString().Equals(Identity) || u.name.ToLower().Equals(Identity.ToLower()) || u.email.ToLower().Equals(Identity.ToLower()));
+            var res = APIClient.DeleteGroupAsync(group.id).Result;
+            base.EndProcessing();
+        }
+    }
 }
