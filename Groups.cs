@@ -89,16 +89,21 @@ namespace Y360Management {
         /// Участники группы
         /// </summary>
         [Parameter(Position = 5)]
-        public List<Member>? Members { get; set; }
+        public List<string>? Members { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
+            if (Members != null) {
+                Helpers.allUsers = APIClient.GetAllUsersAsync().Result;
+                Helpers.allGroups = APIClient.GetAllGroupsAsync().Result;
+                Helpers.allDepartments = APIClient.GetAllDepartmentsAsync().Result;
+            }
             BaseGroup newGroup = new BaseGroup {
                 adminIds = AdminIds,
                 description = Description,
                 externalId = ExternalId,
                 label = Label,
                 name = Name,
-                members = Members
+                members = Members is null ? null : Helpers.GetMembers(Members)
             };
             var result = APIClient.AddGroupAsync(newGroup).Result;
             WriteObject(result);
@@ -138,12 +143,12 @@ namespace Y360Management {
         /// Параметр для удаления или добавления учасников группы (нельзя использовать совместно с параметром MemberList)
         /// </summary>
         [Parameter(Position = 4)]
-        public UlongCollection? Members { get; set; }
+        public StringCollection? Members { get; set; }
         /// <summary>
         /// Параметр для замены всего списка участников группы (нельзя использовать совместно с параметром Members)
         /// </summary>
         [Parameter(Position = 5)]
-        public List<ulong>? MemberList { get; set; }
+        public List<string>? MemberList { get; set; }
         /// <summary>
         /// Параметр для удаления или добавления администраторов группы (нельзя использовать совместно с параметром AdminList)
         /// </summary>
@@ -154,39 +159,39 @@ namespace Y360Management {
         /// </summary>
         [Parameter(Position = 7)]
         public List<ulong>? AdminList { get; set; }
-
-        private List<User> allUsers = new List<User>();
-        private List<Group> allGroups = new List<Group>();
-        private List<Department> allDepartments = new List<Department>();
-
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            allGroups = APIClient.GetAllGroupsAsync().Result;
-            Group group = allGroups.SingleOrDefault(u => u.id.ToString().Equals(Identity) || u.name.ToLower().Equals(Identity.ToLower()) || u.email.ToLower().Equals(Identity.ToLower()));
+            Helpers.allGroups = APIClient.GetAllGroupsAsync().Result;
+            Group group = Helpers.allGroups.SingleOrDefault(u => u.id.ToString().Equals(Identity) || u.name.ToLower().Equals(Identity.ToLower()) || u.email.ToLower().Equals(Identity.ToLower()));
             if (group == null) {
                 base.EndProcessing();
                 return;
             }
-
             if (Members != null || MemberList != null || Admins != null || AdminList != null) {
-                allUsers = APIClient.GetAllUsersAsync().Result;
-                allDepartments = APIClient.GetAllDepartmentsAsync().Result;
+                Helpers.allUsers = APIClient.GetAllUsersAsync().Result;
+                Helpers.allDepartments = APIClient.GetAllDepartmentsAsync().Result;
             }
             if (Name != null) group.name = Name;
             if (Description != null) group.description = Description;
 
             if (ExternalId != null) group.externalId = ExternalId;
             if (MemberList != null) {
-                group.members = GetMembers(MemberList);
+                group.members = Helpers.GetMembers(MemberList);
             }
             else if (Members != null) {
                 if (Members.Add != null) {
-                    group.members.AddRange(GetMembers(Members.Add));
+                    group.members.AddRange(Helpers.GetMembers(Members.Add));
                     group.members.Distinct();
                 }
                 if (Members.Remove != null) {
-                    var removable = GetMembers(Members.Remove);
-                    group.members = group.members.Where(m => !removable.Select(m => m.id).Contains(m.id)).ToList();
+                    var removable = Helpers.GetMembers(Members.Remove);
+                    if (removable.Count == 1) {
+                        var res = APIClient.DeleteMemderFromGroupAsync(group.id, removable[0]).Result;
+                        group.members = null;
+                    }
+                    else {
+                        group.members = group.members.Where(m => !removable.Select(m => m.id).Contains(m.id)).ToList();
+                    }
                 }
             }
             if (AdminList != null) {
@@ -210,14 +215,6 @@ namespace Y360Management {
             WriteObject(result);
 
             base.EndProcessing();
-        }
-        private List<Member> GetMembers(List<ulong> source) {
-            var members = new List<Member>();
-            members.AddRange(allUsers.Where(u => source.Contains(u.id)).Select(x => new Member { id = x.id, type = Yandex.API360.Enums.MemberTypes.user }).ToList());
-            members.AddRange(allGroups.Where(u => source.Contains(u.id)).Select(x => new Member { id = x.id, type = Yandex.API360.Enums.MemberTypes.group }).ToList());
-            members.AddRange(allDepartments.Where(u => source.Contains(u.id)).Select(x => new Member { id = x.id, type = Yandex.API360.Enums.MemberTypes.department }).ToList());
-            members.Distinct();
-            return members;
         }
     }
 }
