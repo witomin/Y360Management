@@ -103,7 +103,7 @@ namespace Y360Management {
                 externalId = ExternalId,
                 label = Label,
                 name = Name,
-                members = Members is null ? null : Helpers.GetMembers(Members)
+                members = Members is null ? null : Helpers.GetMembersByIdentityList(Members)
             };
             var result = APIClient.AddGroupAsync(newGroup).Result;
             WriteObject(result);
@@ -176,15 +176,15 @@ namespace Y360Management {
 
             if (ExternalId != null) group.externalId = ExternalId;
             if (MemberList != null) {
-                group.members = Helpers.GetMembers(MemberList);
+                group.members = Helpers.GetMembersByIdentityList(MemberList);
             }
             else if (Members != null) {
                 if (Members.Add != null) {
-                    group.members.AddRange(Helpers.GetMembers(Members.Add));
+                    group.members.AddRange(Helpers.GetMembersByIdentityList(Members.Add));
                     group.members.Distinct();
                 }
                 if (Members.Remove != null) {
-                    var removable = Helpers.GetMembers(Members.Remove);
+                    var removable = Helpers.GetMembersByIdentityList(Members.Remove);
                     if (removable.Count == 1) {
                         var res = APIClient.DeleteMemderFromGroupAsync(group.id, removable[0]).Result;
                         group.members = null;
