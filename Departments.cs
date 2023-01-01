@@ -87,7 +87,7 @@ namespace Y360Management {
             if (Label != null) department.label = Label;
             if (Name != null) department.name = Name;
             if (Parent != null) {
-                department.headId = allDepartments.SingleOrDefault(d => d.id.ToString().Equals(Parent) || d.email.Equals(Parent)).id;
+                department.parentId = allDepartments.SingleOrDefault(d => d.id.ToString().Equals(Parent) || d.email.Equals(Parent)).id;
             }
             var res = APIClient.EditDepartmentAsync(department).Result;
             WriteObject(department);
@@ -111,6 +111,63 @@ namespace Y360Management {
             if (department != null) {
                 var res = APIClient.DeleteDepartmentAsync(department.id).Result;
             }
+            base.EndProcessing();
+        }
+    }
+    /// <summary>
+    /// Создать подразделение
+    /// </summary>
+    [Cmdlet(VerbsCommon.New, "Department"), OutputType(typeof(Department))]
+    public class NewDepartmentCmdlet : PSCmdlet {
+        /// <summary>
+        /// Обязательный параметр название подразделения
+        /// </summary>
+        [Parameter(Position = 0, Mandatory = true)]
+        public string? Name { get; set; }
+        /// <summary>
+        /// Описание подразделения
+        /// </summary>
+        [Parameter(Position = 1)]
+        public string? Description { get; set; }
+        /// <summary>
+        /// Произвольный внешний идентификатор подразделения
+        /// </summary>
+        [Parameter(Position = 2)]
+        public string? ExternalId { get; set; }
+        /// <summary>
+        /// Сотрудник-руководител подразделения
+        /// </summary>
+        [Parameter(Position = 3)]
+        public string? Head { get; set; }
+        /// <summary>
+        /// Имя почтовой рассылки подразделения. Например, для адреса new-department@ваш-домен.ru имя почтовой рассылки — это new-department.
+        /// </summary>
+        [Parameter(Position = 4)]
+        public string? Label { get; set; }
+        /// <summary>
+        /// Родительское подразделение
+        /// </summary>
+        [Parameter(Position = 5)]
+        public string? Parent { get; set; }
+        protected override void EndProcessing() {
+            var APIClient = Helpers.GetApiClient(this);
+            Department department = new Department {
+                name = Name,
+                description = Description,
+                externalId = ExternalId,
+                label = Label,
+            };
+            if (Head != null) {
+                var allUsers = APIClient.GetAllUsersAsync().Result;
+                department.headId = allUsers.SingleOrDefault(u => u.id.ToString().Equals(Head) || u.nickname.Equals(Head) || u.email.Equals(Head)).id;
+            }
+
+            if (Parent != null) {
+                List<Department> allDepartments = APIClient.GetAllDepartmentsAsync().Result;
+                department.parentId = allDepartments.SingleOrDefault(d => d.id.ToString().Equals(Parent) || d.email.Equals(Parent)).id;
+            }
+            var result = APIClient.AddDepartmentAsync(department).Result;
+            WriteObject(result);
             base.EndProcessing();
         }
     }
