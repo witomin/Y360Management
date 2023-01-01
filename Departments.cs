@@ -11,7 +11,7 @@ namespace Y360Management {
     public class GetDepartmentsCmdlet : PSCmdlet {
         /// <summary>
         /// Параметр Identity определяет подразделение, которое требуется просмотреть.
-        /// Можно использовать любое значение, которое однозначно определяет пользователя:
+        /// Можно использовать любое значение, которое однозначно определяет подразделение:
         /// - Id
         /// - email
         /// </summary>
@@ -19,11 +19,11 @@ namespace Y360Management {
         public string? Identity { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            List<Department> result = APIClient.GetAllDepartmentsAsync().Result;
+            List<Department> Departments = APIClient.GetAllDepartmentsAsync().Result;
             if (Identity != null) {
-                result = result.Where(u => u.id.ToString().Equals(Identity) || u.email.ToLower().Equals(Identity.ToLower())).ToList();
+                Departments = Departments.Where(u => u.id.ToString().Equals(Identity) || u.email.ToLower().Equals(Identity.ToLower())).ToList();
             }
-            WriteObject(result);
+            WriteObject(Departments);
             base.EndProcessing();
         }
     }
@@ -33,8 +33,8 @@ namespace Y360Management {
     [Cmdlet(VerbsCommon.Set, "Department"), OutputType(typeof(Department))]
     public class SetDepartmentCmdlet : PSCmdlet {
         /// <summary>
-        /// Обязательный параметр Identity определяет подразделение, которое требуется просмотреть.
-        /// Можно использовать любое значение, которое однозначно определяет пользователя:
+        /// Обязательный параметр Identity определяет подразделение, которое требуется изменить.
+        /// Можно использовать любое значение, которое однозначно определяет подразделение:
         /// - Id
         /// - email
         /// </summary>
@@ -91,6 +91,26 @@ namespace Y360Management {
             }
             var res = APIClient.EditDepartmentAsync(department).Result;
             WriteObject(department);
+            base.EndProcessing();
+        }
+    }
+    [Cmdlet(VerbsCommon.Remove, "Department"), OutputType(typeof(Department))]
+    public class RemoveDepartmentCmdlet : PSCmdlet {
+        /// <summary>
+        /// Обязательный параметр Identity определяет подразделение, которое требуется удалить.
+        /// Можно использовать любое значение, которое однозначно определяет подразделение:
+        /// - Id
+        /// - email
+        /// </summary>
+        [Parameter(Position = 0, Mandatory = true)]
+        public string Identity { get; set; }
+        protected override void EndProcessing() {
+            var APIClient = Helpers.GetApiClient(this);
+            List<Department> allDepartments = APIClient.GetAllDepartmentsAsync().Result;
+            var department = allDepartments.SingleOrDefault(u => u.id.ToString().Equals(Identity) || u.email.ToLower().Equals(Identity.ToLower()));
+            if (department != null) {
+                var res = APIClient.DeleteDepartmentAsync(department.id).Result;
+            }
             base.EndProcessing();
         }
     }
