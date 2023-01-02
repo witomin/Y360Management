@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
+using Y360Management.Types;
 using Yandex.API360.Models;
 
 namespace Y360Management {
@@ -70,6 +71,16 @@ namespace Y360Management {
         /// </summary>
         [Parameter(Position = 6)]
         public string? Parent { get; set; }
+        /// <summary>
+        /// Параметр для управления алиасами
+        /// </summary>
+        [Parameter(Position = 7)]
+        public StringCollection? Aliases { get; set; }
+        /// <summary>
+        /// Список алиасов
+        /// </summary>
+        [Parameter(Position = 8)]
+        public List<string>? AliasList { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
             List<Department> allDepartments = APIClient.GetAllDepartmentsAsync().Result;
@@ -88,6 +99,28 @@ namespace Y360Management {
             if (Name != null) department.name = Name;
             if (Parent != null) {
                 department.parentId = allDepartments.SingleOrDefault(d => d.id.ToString().Equals(Parent) || d.email.Equals(Parent)).id;
+            }
+            if (Aliases != null) {
+                if (Aliases.Add != null) {
+                    foreach (var alias in Aliases.Add) {
+                        var result = APIClient.AddAliasToDepartmentAsync(department.id, alias).Result;
+                    }
+                }
+                if (Aliases.Remove != null) {
+                    foreach (var alias in Aliases.Remove) {
+                        var result = APIClient.DeleteAliasFromDepartmentAsync(department.id, alias).Result;
+                    }
+                }
+            }
+            else if (AliasList != null) {
+                var add = AliasList.Where(a => !department.aliases.Contains(a));
+                var remove = department.aliases.Where(a => !AliasList.Contains(a));
+                foreach (var alias in add) {
+                    var result = APIClient.AddAliasToDepartmentAsync(department.id, alias).Result;
+                }
+                foreach (var alias in remove) {
+                    var result = APIClient.DeleteAliasFromDepartmentAsync(department.id, alias).Result;
+                }
             }
             var res = APIClient.EditDepartmentAsync(department).Result;
             WriteObject(department);
@@ -151,7 +184,7 @@ namespace Y360Management {
         public string? Parent { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            Department department = new Department {
+            BaseDepartment department = new BaseDepartment {
                 name = Name,
                 description = Description,
                 externalId = ExternalId,
