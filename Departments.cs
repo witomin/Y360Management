@@ -103,12 +103,16 @@ namespace Y360Management {
             if (Aliases != null) {
                 if (Aliases.Add != null) {
                     foreach (var alias in Aliases.Add) {
-                        var result = APIClient.AddAliasToDepartmentAsync(department.id, alias).Result;
+                        if (!department.aliases.Contains(alias)) {
+                            var result = APIClient.AddAliasToDepartmentAsync(department.id, alias).Result;
+                        }
                     }
                 }
                 if (Aliases.Remove != null) {
                     foreach (var alias in Aliases.Remove) {
-                        var result = APIClient.DeleteAliasFromDepartmentAsync(department.id, alias).Result;
+                        if (department.aliases.Contains(alias)) {
+                            var result = APIClient.DeleteAliasFromDepartmentAsync(department.id, alias).Result;
+                        }
                     }
                 }
             }

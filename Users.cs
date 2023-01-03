@@ -128,7 +128,7 @@ namespace Y360Management {
         /// Язык сотрудника
         /// </summary>
         [Parameter(Position = 10)]
-        public Languages? Language { get; set; }
+        public string? Language { get; set; }
         /// <summary>
         /// Имя сотрудника
         /// </summary>
@@ -211,12 +211,16 @@ namespace Y360Management {
             if (Aliases != null) {
                 if (Aliases.Add != null) {
                     foreach (var alias in Aliases.Add) {
-                        var res = APIClient.AddAliasToUserAsync(user.id, alias).Result;
+                        if (!user.aliases.Contains(alias)) {
+                            var res = APIClient.AddAliasToUserAsync(user.id, alias).Result;
+                        }
                     }
                 }
                 if (Aliases.Remove != null) {
                     foreach (var alias in Aliases.Remove) {
-                        var res = APIClient.DeleteAliasFromUserAsync(user.id, alias).Result;
+                        if (user.aliases.Contains(alias)) {
+                            var res = APIClient.DeleteAliasFromUserAsync(user.id, alias).Result;
+                        }
                     }
                 }
             }
