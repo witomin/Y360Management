@@ -77,7 +77,7 @@ namespace Y360Management {
         [Parameter(Position = 7)]
         public StringCollection? Aliases { get; set; }
         /// <summary>
-        /// Список алиасов
+        /// Список алиасов, не работает совместно с параметром Aliases
         /// </summary>
         [Parameter(Position = 8)]
         public List<string>? AliasList { get; set; }
@@ -127,7 +127,10 @@ namespace Y360Management {
             base.EndProcessing();
         }
     }
-    [Cmdlet(VerbsCommon.Remove, "Department"), OutputType(typeof(Department))]
+    /// <summary>
+    /// Удалить подразделение
+    /// </summary>
+    [Cmdlet(VerbsCommon.Remove, "Department")]
     public class RemoveDepartmentCmdlet : PSCmdlet {
         /// <summary>
         /// Обязательный параметр Identity определяет подразделение, которое требуется удалить.
