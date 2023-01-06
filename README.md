@@ -101,11 +101,11 @@
 + Parent. Родительское подразделение. Можно использовать любое значение, которое однозначно определяет подразделение: Id, Email.
 + Aliases. Параметр для управления алиасами. Для добавления алиаса передайте параметр в виде:
         
-        -Alises @{add="alias"}
+        -Alises @{add="alias1","alias2"}
 
     Для удаления алиаса передайте параметр в виде:
 
-        -Alises @{remove="alias"}
+        -Alises @{remove="alias1","alias2"}
 
 + AliasList. Список алиасов, не работает совместно с параметром Aliases
 #### Результат:
@@ -125,57 +125,73 @@
     New-User [-NickName] <string> [-FirstName] <string> [-LastName] <string> [[-MiddleName] <string>] [-Password] <string> [[-About] <string>] [[-Birthday] <string>] [[-Contacts] <List[BaseContact]>] [-DepartmentId] <ulong> [[-ExternalId] <string>] [[-Gender] <string>] [-isAdmin] [[-Language] <string>] [[-Position] <string>] [[-Timezone] <string>] [<CommonParameters>]
 
 #### Параметры:
-+ NickName
-+ FirstName
-+ LastName
-+ MiddleName
-+ Password 
-+ About
-+ Birthday
-+ Contacts
-+ DepartmentId
-+ ExternalId
-+ Gender
-+ isAdmin
-+ Language
-+ Position
-+ Timezone
-
++ NickName. Обязательный параметр. Логин сотрудника.
++ FirstName. Обязательный параметр. Имя сотрудника.
++ LastName. Обязательный параметр. Фамилия сотрудника.
++ MiddleName. Отчество сотрудника.
++ Password. Обязательный параметр. Пароль сотрудника.
++ About. Описание сотрудника. Формат YYYY-MM-DD.
++ Birthday. Дата рождения сотрудника.
++ Contacts. Список контактов сотрудника. Массив объектов, содержащих поля:
+    + type. Тип контакта. Возможные значения: email; phone_extension; phone; site; icq; twitter; skype.
+    + value. Значение контакта.
+    
+    Оба поля обязательны для заполнения.
++ DepartmentId. Обязательный параметр. Идентификатор подразделения сотрудника.
++ ExternalId. Произвольный внешний идентификатор сотрудника.
++ Gender. Пол сотрудника.
++ isAdmin. Переключатель. Признак администратора организации.
++ Language. Язык сотрудника. Например: ru, en.
++ Position. Должность сотрудника.
++ Timezone. Часовой пояс сотрудника. Например: Europe/Samara, Europe/Moskow.
+#### Результат:
+Возвращает созданного пользователя.
 ### **Get-Users** - получить информацию о сотрудниках
 #### Синтаксис:
 
     Get-Users [[-Identity] <string>] [[-ResultSize] <int>] [-EnableOnly] [-DisableOnly] [<CommonParameters>]
 
 #### Параметры:
-+ Identity
-+ ResultSize
-+ EnableOnly
-+ DisableOnly
++ Identity. Определяет пользователя, которого требуется просмотреть.Можно использовать любое значение, которое однозначно определяет пользователя: Id, nickname, email. Если параметр не используется, то возвращается полный список сотрудников.
++ ResultSize.  Указывает максимальное число возвращаемых результатов. По умолчанию выводится полный список сотрудников.
++ EnableOnly. Указывает, что нужно показать только активных пользователей.
++ DisableOnly. Указывает, что нужно показать только неактивных пользователей. Не работает совместно с параметром EnableOnly.
+#### Результат:
+Возвращает список сотрудников.
 
-### **Set-User** - изменение информации о сотруднике
+### **Set-User** - изменить информацию о сотруднике
 #### Синтаксис:
 
     Set-User [-Identity] <string> [[-About] <string>] [[-Birthday] <string>] [[-Contacts] <List[BaseContact]>] [[-DepartmentId] <ulong>] [[-ExternalId] <string>] [[-Gender] <string>] [[-isAdmin] <bool>] [-Enable] [-Disable] [[-Language] <string>] [[-FirstName] <string>] [[-LastName] <string>] [[-MiddleName] <string>] [[-Password] <string>] [[-Position] <string>] [[-Timezone] <string>] [[-Aliases] <StringCollection>] [<CommonParameters>]
 
 #### Параметры:
-+ Identity
-+ About
-+ Birthday
-+ Contacts
-+ DepartmentId
-+ ExternalId
-+ Gender
-+ isAdmin
-+ Enable
-+ Disable
-+ Language
-+ FirstName
-+ LastName
-+ MiddleName
-+ Password
-+ Position
-+ Timezone
-+ Aliases
++ Identity. Определяет пользователя, который требуется изменить. Можно использовать любое значение, которое однозначно определяет пользователя: Id, nickname, email. Если параметр не используется, то возвращается полный список сотрудников.
++ About. Описание сотрудника.
++ Birthday. Дата рождения сотрудника. Формат YYYY-MM-DD.
++ Contacts. Список контактов сотрудника.
++ DepartmentId. Идентификатор подразделения сотрудника.
++ ExternalId. Произвольный внешний идентификатор сотрудника.
++ Gender. Пол сотрудника. 
++ isAdmin. Признак администратора организации.
++ Enable. Включить пользователя.
++ Disable. Отключить пользователя, нельзя использовать этот параметр вместе с параметром Enable
++ Language. Язык сотрудника. Например: ru, en.
++ FirstName. Имя сотрудника.
++ LastName. Фамилия сотрудника.
++ MiddleName. Отчество сотрудника.
++ Password. Пароль сотрудника.
++ Position. Должность сотрудника
++ Timezone. Часовой пояс сотрудника. Например: Europe/Samara, Europe/Moskow.
++ Aliases. Параметр для управления алиасами. Для добавления алиаса передайте параметр в виде:
+        
+        -Alises @{add="alias1","alias2"}
+
+    Для удаления алиаса передайте параметр в виде:
+
+        -Alises @{remove="alias1","alias2"}
+
+#### Результат:
+Возвращает измененного сотрудника.
 
 ### **Get-Status2FAUser** - Просмотреть статус 2FA сотрудника
 #### Синтаксис:
@@ -183,7 +199,9 @@
     Get-Status2FAUser [-Identity] <string> [<CommonParameters>]
 
 #### Параметры:
-+ Identity
++ Identity. Определяет пользователя, которого требуется просмотреть.Можно использовать любое значение, которое однозначно определяет пользователя: Id, nickname, email.
+#### Результат:
+Возвращает true, если у  сотрудника включено 2FA, в противном случае возвращает false.
 
 ### **New-Group** - создать новую группу
 #### Синтаксис:
@@ -191,12 +209,14 @@
     New-Group [-Name] <string> [[-Description] <string>] [[-ExternalId] <string>] [[-Label] <string>] [[-Admins] <List[string]>] [[-Members] <List[string]>] [<CommonParameters>]
 
 #### Параметры:
-+ Name
-+ Description
-+ ExternalId
-+ Label
-+ Admins
-+ Members 
++ Name. Обязательный параметр Название группы.
++ Description. Описание группы.
++ ExternalId. Произвольный внешний идентификатор группы.
++ Label.Имя почтовой рассылки группы. Например, для адреса new-group@ваш-домен.ru имя почтовой рассылки — это new-group.
++ Admins. Руководители группы. Можно использовать любое значение, которое однозначно определяет пользователя: Id, nickname, email.
++ Members. Участники группы. Можно использовать любое значение, которое однозначно определяет пользователя, группу или подразделение: Id, nickname, name, email. 
+#### Результат:
+Возвращается созданная группа.
 
 ### **Get-Groups** - получение информации о группах
 #### Синтаксис:
@@ -204,7 +224,9 @@
     Get-Groups [[-Identity] <string>] [<CommonParameters>]
 
 #### Параметры:
-+ Identity
++ Identity. Определяет группу, которую требуется просмотреть. Можно использовать любое значение, которое однозначно определяет группу: Id, name, email. Если параметр не используется, возвращается полный списко групп.
+#### Результат:
+Возвращается список групп.
 
 ### **Get-GroupMembers** - получение информации об участниках группы
 #### Синтаксис:
@@ -212,7 +234,16 @@
     Get-GroupMembers [-Identity] <string> [<CommonParameters>]
 
 #### Параметры:
-+ Identity
++ Identity. Обязательный параметр. Определяет группу, которую требуется просмотреть. Можно использовать любое значение, которое однозначно определяет группу: Id, name, email.
+#### Результат:
+
+    departments groups users
+    ----------- ------ -----
+    {}          {}     {}
+
++ departments. Список подразделений.
++ groups. Список групп.
++ users. Список сотрудников.
 
 ### **Set-Group** - изменить параметры группы
 #### Синтаксис:
@@ -220,19 +251,37 @@
     Set-Group [-Identity] <string> [[-Name] <string>] [[-Description] <string>] [[-ExternalId] <string>] [[-Members] <StringCollection>] [[-MemberList] <List[string]>] [[-Admins] <StringCollection>] [[-AdminList] <List[string]>] [<CommonParameters>]
 
 #### Параметры:
-+ Identity
-+ Name
-+ Description
-+ ExternalId
-+ Members
-+ MemberList
-+ Admins
-+ AdminList
++ Identity. Обязательный параметр. Определяет группу, которую требуется изменить. Можно использовать любое значение, которое однозначно определяет группу: Id, name, email.
++ Name. Название группы.
++ Description. Описание группы. 
++ ExternalId. Произвольный внешний идентификатор группы.
++ Members. Параметр для удаления или добавления учасников группы. Для добавления участника передайте параметр в виде:
+        
+        -Members @{add="member1","member2"}
 
-### **Remove-Group** - изменить параметры группы
+    Для удаления участника передайте параметр в виде:
+
+        -Members @{remove="member1","member2"}
+
+    Можно использовать любое значение, которое однозначно определяет пользователя, группу или подразделение: Id, nickname, name, email.
+
++ MemberList. Заменить список участников группы. Можно использовать любое значение, которое однозначно определяет пользователя, группу или подразделение: Id, nickname, name, email. Нельзя использовать совместно с параметром Members.
++ Admins. Параметр для удаления или добавления администраторов группы. Для добавления администратора передайте параметр в виде:
+        
+        -Admins @{add="admin1","admin2"}
+
+    Для удаления администратора передайте параметр в виде:
+
+        -Admins @{remove="admin1","admin2"}
+
+    Можно использовать любое значение, которое однозначно определяет пользователя: Id, nickname, email.
+
++ AdminList. Заменить список администраторов группы. Можно использовать любое значение, которое однозначно определяет пользователя: Id, nickname, email. Нельзя использовать совместно с параметром Admins.
+
+### **Remove-Group** - удалить группу
 #### Синтаксис:
 
     Remove-Group [-Identity] <string> [<CommonParameters>]
 
 #### Параметры:
-+ Identity
++ Identity. Обязательный параметр. Определяет группу, которую требуется удалить. Можно использовать любое значение, которое однозначно определяет группу: Id, name, email.

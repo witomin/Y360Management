@@ -13,7 +13,7 @@ namespace Y360Management {
     [Cmdlet(VerbsCommon.Get, "Users"), OutputType(typeof(List<User>))]
     public class GetUsersCmdlet : PSCmdlet {
         /// <summary>
-        /// Параметр Identity определяет пользователя, который требуется просмотреть.
+        /// Параметр Identity определяет пользователя, которого требуется просмотреть.
         /// Можно использовать любое значение, которое однозначно определяет пользователя:
         /// - Id
         /// - nickname
@@ -150,7 +150,7 @@ namespace Y360Management {
         [Parameter(Position = 14)]
         public string? Password { get; set; }
         /// <summary>
-        /// Пароль сотрудника
+        /// Должность сотрудника
         /// </summary>
         [Parameter(Position = 15)]
         public string? Position { get; set; }
@@ -300,7 +300,7 @@ namespace Y360Management {
         [Parameter(Position = 12)]
         public string? Language { get; set; }
         /// <summary>
-        /// Пароль сотрудника
+        /// Должность сотрудника
         /// </summary>
         [Parameter(Position = 13)]
         public string? Position { get; set; }
