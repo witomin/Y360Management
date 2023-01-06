@@ -22,8 +22,14 @@ namespace Y360Management {
     /// </summary>
     [Cmdlet(VerbsCommon.Set, "AllowList")]
     public class SetAllowListCmdlet : PSCmdlet {
+        /// <summary>
+        /// Управление списком разрешенных IP-адресов и CIDR-подсетей
+        /// </summary>
         [Parameter(Position = 0)]
         public StringCollection? Items { get; set; }
+        /// <summary>
+        /// Список разрешенных IP-адресов и CIDR-подсетей
+        /// </summary>
         [Parameter(Position = 1)]
         public List<string>? AllowList { get; set; }
         protected override void EndProcessing() {

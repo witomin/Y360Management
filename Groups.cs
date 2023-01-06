@@ -113,8 +113,8 @@ namespace Y360Management {
     /// <summary>
     /// Управлять группами
     /// </summary>
-    [Cmdlet(VerbsCommon.Set, "Groups"), OutputType(typeof(Group))]
-    public class SetGroupsCmdlet : PSCmdlet {
+    [Cmdlet(VerbsCommon.Set, "Group"), OutputType(typeof(Group))]
+    public class SetGroupCmdlet : PSCmdlet {
         /// <summary>
         /// Обязательный параметр Identity определяет группу, которую требуется просмотреть.
         /// Можно использовать любое значение, которое однозначно определяет группу:
