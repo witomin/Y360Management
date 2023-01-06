@@ -8,7 +8,7 @@ using Yandex.API360.Models;
 
 namespace Y360Management {
     /// <summary>
-    /// Получить информацию о пользователях
+    /// Получить информацию о сотрудниках
     /// </summary>
     [Cmdlet(VerbsCommon.Get, "Users"), OutputType(typeof(List<User>))]
     public class GetUsersCmdlet : PSCmdlet {
@@ -66,7 +66,7 @@ namespace Y360Management {
         }
     }
     /// <summary>
-    /// Изменить информацию о пользователе
+    /// Изменить информацию о сотруднике
     /// </summary>
     [Cmdlet(VerbsCommon.Set, "User"), OutputType(typeof(List<User>))]
     public class SetUserCmdlet : PSCmdlet {
@@ -225,6 +225,116 @@ namespace Y360Management {
                 }
             }
             var result = APIClient.EditUserAsync(userEdit).Result;
+            WriteObject(result);
+            base.EndProcessing();
+        }
+    }
+    /// <summary>
+    /// Создать сотрудника
+    /// </summary>
+    [Cmdlet(VerbsCommon.New, "User"), OutputType(typeof(List<User>))]
+    public class NewUserCmdlet : PSCmdlet {
+        /// <summary>
+        /// Логин сотрудника
+        /// </summary>
+        [Parameter(Position = 0, Mandatory = true)]
+        public string NickName { get; set; }
+        /// <summary>
+        /// Имя сотрудника
+        /// </summary>
+        [Parameter(Position = 1, Mandatory = true)]
+        public string FirstName { get; set; }
+        /// <summary>
+        /// Фамилия сотрудника
+        /// </summary>
+        [Parameter(Position = 2, Mandatory = true)]
+        public string LastName { get; set; }
+        /// <summary>
+        /// Отчество сотрудника
+        /// </summary>
+        [Parameter(Position = 3)]
+        public string? MiddleName { get; set; }
+        /// <summary>
+        /// Пароль сотрудника
+        /// </summary>
+        [Parameter(Position = 4, Mandatory = true)]
+        public string Password { get; set; }
+        /// <summary>
+        /// Описание сотрудника
+        /// </summary>
+        [Parameter(Position = 5)]
+        public string? About { get; set; }
+        /// <summary>
+        /// Дата рождения сотрудника
+        /// </summary>
+        [Parameter(Position = 6)]
+        public string? Birthday { get; set; }
+        /// <summary>
+        /// Список контактов сотрудника
+        /// </summary>
+        [Parameter(Position = 7)]
+        public List<BaseContact>? Contacts { get; set; }
+        /// <summary>
+        /// Идентификатор подразделения сотрудника
+        /// </summary>
+        [Parameter(Position = 8, Mandatory = true)]
+        public ulong? DepartmentId { get; set; }
+        /// <summary>
+        /// Произвольный внешний идентификатор сотрудника
+        /// </summary>
+        [Parameter(Position = 9)]
+        public string? ExternalId { get; set; }
+        /// <summary>
+        /// Пол сотрудника
+        /// </summary>
+        [Parameter(Position = 10)]
+        public string? Gender { get; set; }
+        /// <summary>
+        /// Признак администратора организации
+        /// </summary>
+        [Parameter(Position = 11)]
+        public SwitchParameter isAdmin { get; set; }
+        /// <summary>
+        /// Язык сотрудника
+        /// </summary>
+        [Parameter(Position = 12)]
+        public string? Language { get; set; }
+        /// <summary>
+        /// Пароль сотрудника
+        /// </summary>
+        [Parameter(Position = 13)]
+        public string? Position { get; set; }
+        /// <summary>
+        /// Часовой пояс сотрудника
+        /// </summary>
+        [Parameter(Position = 14)]
+        public string? Timezone { get; set; }
+        protected override void EndProcessing() {
+            if (string.IsNullOrEmpty(NickName) || string.IsNullOrEmpty(FirstName) || string.IsNullOrEmpty(LastName) || string.IsNullOrEmpty(Password)) {
+                base.EndProcessing();
+                return;
+            }
+            var APIClient = Helpers.GetApiClient(this);
+            UserAdd userEdit = new UserAdd {
+                nickname = NickName,
+                about = About,
+                birthday = Birthday,
+                contacts = Contacts,
+                departmentId = (ulong)DepartmentId,
+                externalId = ExternalId,
+                gender = Gender,
+                isAdmin = isAdmin,
+                language = Language,
+                name = new Name {
+                    first = FirstName,
+                    last = LastName,
+                    middle = MiddleName
+                },
+                password = Password,
+                position = Position,
+                timezone = Timezone
+            };
+            var result = APIClient.AddUserAsync(userEdit).Result;
             WriteObject(result);
             base.EndProcessing();
         }
