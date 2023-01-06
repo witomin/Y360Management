@@ -339,4 +339,31 @@ namespace Y360Management {
             base.EndProcessing();
         }
     }
+    /// <summary>
+    /// Просмотреть статус 2FA сотрудника
+    /// </summary>
+    [Cmdlet(VerbsCommon.Get, "Status2FAUser"), OutputType(typeof(bool))]
+    public class GetStatus2FAUserCmdlet : PSCmdlet {
+        /// <summary>
+        /// Параметр Identity определяет пользователя, который требуется просмотреть.
+        /// Можно использовать любое значение, которое однозначно определяет пользователя:
+        /// - Id
+        /// - nickname
+        /// - email
+        /// </summary>
+        [Parameter(Position = 0, Mandatory = true)]
+        public string? Identity { get; set; }
+        protected override void EndProcessing() {
+            var APIClient = Helpers.GetApiClient(this);
+            var allUsers = APIClient.GetAllUsersAsync().Result;
+            var user = allUsers.SingleOrDefault(u => u.id.ToString().Equals(Identity) ||
+            u.nickname.ToLower().Equals(Identity.ToLower()) ||
+            u.email.ToLower().Equals(Identity.ToLower()));
+            if (user != null) {
+                var result = APIClient.GetStatus2FAUserAsync(user.id).Result;
+                WriteObject(result);
+            }
+            base.EndProcessing();
+        }
+    }
 }
