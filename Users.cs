@@ -22,11 +22,10 @@ namespace Y360Management {
         [Parameter(Position = 0)]
         public string? Identity { get; set; }
         /// <summary>
-        /// Параметр ResultSize указывает максимальное число возвращаемых результатов
-        /// По умолчанию выводится полный список сотрудников
+        /// Фильтр. Выполняется поиск по вхождению строки в свойствах name, nickname, position, email.
         /// </summary>
         [Parameter(Position = 1)]
-        public int? ResultSize { get; set; }
+        public string? Filter { get; set; }
         /// <summary>
         /// Параметр EnableOnly указывает, что нужно показать только активных пользователей
         /// </summary>
@@ -37,29 +36,63 @@ namespace Y360Management {
         /// </summary>
         [Parameter(Position = 3)]
         public SwitchParameter DisableOnly { get; set; }
+        /// <summary>
+        /// Параметр AdminOnly указывает, что нужно показать только администраторов
+        /// </summary>
+        [Parameter(Position = 4)]
+        public SwitchParameter AdminOnly { get; set; }
+        /// <summary>
+        /// Параметр RobotOnly указывает, что нужно показать только пользователей, явзяющихся роботами
+        /// </summary>
+        [Parameter(Position = 5)]
+        public SwitchParameter RobotOnly { get; set; }
+        /// <summary>
+        /// Параметр DismissedOnly указывает, что нужно показать только уволенных сотрудников
+        /// </summary>
+        [Parameter(Position = 6)]
+        public SwitchParameter DismissedOnly { get; set; }
+        /// <summary>
+        /// Параметр ResultSize указывает максимальное число возвращаемых результатов
+        /// По умолчанию выводится полный список сотрудников
+        /// </summary>
+        [Parameter(Position = 7)]
+        public int? ResultSize { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            List<User> result = null;
+            List<User> result = APIClient.GetAllUsersAsync().Result;
             if (Identity != null) {
-                result = APIClient.GetAllUsersAsync().Result;
                 result = result.Where(u => u.id.ToString().Equals(Identity) ||
                 u.nickname.ToLower().Equals(Identity.ToLower()) ||
                 u.email.ToLower().Equals(Identity.ToLower())).ToList();
             }
-            else
-            if (ResultSize != null) {
-                result = APIClient.GetUsersAsync(perPage: (int)ResultSize).Result;
+            if (Filter != null) {
+                result = result.Where(u => u.nickname.Contains(Filter)||
+                u.name.first.Contains(Filter)||
+                u.name.last.Contains(Filter) ||
+                u.name.middle.Contains(Filter) ||
+                u.nickname.Contains(Filter) ||
+                u.position.Contains(Filter) ||
+                u.email.Contains(Filter)
+                ).ToList();
             }
-            else {
-                result = APIClient.GetAllUsersAsync().Result;
-            }
-
             if (EnableOnly) {
                 result = result.Where(u => u.isEnabled).ToList();
             }
             else
             if (DisableOnly) {
                 result = result.Where(u => !u.isEnabled).ToList();
+            }
+            if (AdminOnly) {
+                result = result.Where(u => u.isAdmin).ToList();
+            }
+            if (RobotOnly) {
+                result = result.Where(u => u.isRobot).ToList();
+            }
+            if (DismissedOnly) {
+                result = result.Where(u => u.isDismissed).ToList();
+            }
+            if (ResultSize != null) {
+                result = result.Take((int)ResultSize).ToList();
             }
             WriteObject(result);
             base.EndProcessing();
