@@ -18,11 +18,22 @@ namespace Y360Management {
         /// </summary>
         [Parameter(Position = 0)]
         public string? Identity { get; set; }
+        /// <summary>
+        /// Фильтр. Выполняется поиск по вхождению строки в свойствах name, email, description.
+        /// </summary>
+        [Parameter(Position = 1)]
+        public string? Filter { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
             List<Department> Departments = APIClient.GetAllDepartmentsAsync().Result;
             if (Identity != null) {
-                Departments = Departments.Where(u => u.id.ToString().Equals(Identity) || u.email.ToLower().Equals(Identity.ToLower())).ToList();
+                Departments = Departments.Where(d => d.id.ToString().Equals(Identity) || d.email.ToLower().Equals(Identity.ToLower())).ToList();
+            }
+            if (Filter != null) {
+                Departments = Departments.Where(d => d.email.ToLower().Contains(Filter.ToLower()) ||
+                d.name.ToLower().Contains(Filter.ToLower()) ||
+                d.description.ToLower().Contains(Filter.ToLower())
+                ).ToList();
             }
             WriteObject(Departments);
             base.EndProcessing();
