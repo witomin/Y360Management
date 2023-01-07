@@ -66,13 +66,13 @@ namespace Y360Management {
                 u.email.ToLower().Equals(Identity.ToLower())).ToList();
             }
             if (Filter != null) {
-                result = result.Where(u => u.nickname.Contains(Filter)||
-                u.name.first.Contains(Filter)||
-                u.name.last.Contains(Filter) ||
-                u.name.middle.Contains(Filter) ||
-                u.nickname.Contains(Filter) ||
-                u.position.Contains(Filter) ||
-                u.email.Contains(Filter)
+                result = result.Where(u => u.nickname.ToLower().Contains(Filter.ToLower()) ||
+                u.name.first.ToLower().Contains(Filter.ToLower()) ||
+                u.name.last.ToLower().Contains(Filter.ToLower()) ||
+                u.name.middle.ToLower().Contains(Filter.ToLower()) ||
+                u.nickname.ToLower().Contains(Filter.ToLower()) ||
+                u.position.ToLower().Contains(Filter.ToLower()) ||
+                u.email.ToLower().Contains(Filter.ToLower())
                 ).ToList();
             }
             if (EnableOnly) {
