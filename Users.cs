@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
 using Y360Management.Types;
-using Yandex.API360.Enums;
 using Yandex.API360.Models;
 
 namespace Y360Management {

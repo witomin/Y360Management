@@ -76,7 +76,7 @@ CmdletsToExport = 'Connect-Y360', 'Get-AllowList', 'Set-AllowList', 'Remove-Allo
 'Get-Status2FA', 'New-Department', 'Get-Departments', 'Set-Department', 
 'Remove-Department', 'New-User', 'Get-Users', 'Set-User', 
 'Get-Status2FAUser', 'New-Group', 'Get-Groups', 'Get-GroupMembers', 
-'Set-Group', 'Remove-Group'
+'Set-Group', 'Remove-Group', 'Get-Organizations'
 
 # Variables to export from this module
 VariablesToExport = '*'
