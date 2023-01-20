@@ -255,6 +255,9 @@ namespace Y360Management {
                     }
                 }
             }
+            if (Contacts?.Count == 0) {
+                var res = APIClient.DeleteContactsFromUserAsync(user.id).Result;
+            }
             var result = APIClient.EditUserAsync(userEdit).Result;
             WriteObject(result);
             base.EndProcessing();
