@@ -188,6 +188,10 @@ namespace Y360Management {
             if (ExternalId != null) group.externalId = ExternalId;
             if (MemberList != null) {
                 group.members = Helpers.GetMembersByIdentityList(MemberList);
+                if (group.members.Count == 0) {
+                    var res = APIClient.DeleteAllMembersFromGroupAsync(group.id).Result;
+                    group.members = null;
+                }
             }
             else if (Members != null) {
                 if (Members.Add != null) {
@@ -197,16 +201,24 @@ namespace Y360Management {
                 if (Members.Remove != null) {
                     var removable = Helpers.GetMembersByIdentityList(Members.Remove);
                     if (removable.Count == 1) {
-                        var res = APIClient.DeleteMemderFromGroupAsync(group.id, removable[0]).Result;
+                        var res = APIClient.DeleteMemberFromGroupAsync(group.id, removable[0]).Result;
                         group.members = null;
                     }
                     else {
                         group.members = group.members.Where(m => !removable.Select(m => m.id).Contains(m.id)).ToList();
+                        if (group.members.Count == 0) {
+                            var res = APIClient.DeleteAllMembersFromGroupAsync(group.id).Result;
+                            group.members = null;
+                        }
                     }
                 }
             }
             if (AdminList != null) {
                 group.adminIds = AdminList is null ? null : Helpers.GetMembersByIdentityList(AdminList).Select(a => a.id).ToList();
+                if (group.adminIds.Count == 0) {
+                    var res = APIClient.DeleteAllManagersFromGroupAsync(group.id).Result;
+                    group.adminIds = null;
+                }
             }
             else if (Admins != null) {
                 if (Admins.Add != null) {
@@ -216,13 +228,12 @@ namespace Y360Management {
                 if (Admins.Remove != null) {
                     var removable = Helpers.GetMembersByIdentityList(Admins.Remove).Select(a=>a.id);
                     group.adminIds = group.adminIds.Where(m => !removable.Contains(m)).ToList();
+                    if (group.adminIds.Count==0) {
+                        var res = APIClient.DeleteAllManagersFromGroupAsync(group.id).Result;
+                        group.adminIds = null;
+                    }
                 }
             }
-            //!!!!!!!!!!
-
-            group.adminIds = null; // Не удается менять adminIds, приходит ошибка сервера код 500
-
-            //!!!!!!!!!!!
             var result = APIClient.EditGroupAsync(group).Result;
             WriteObject(result);
 
