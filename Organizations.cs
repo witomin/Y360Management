@@ -22,7 +22,7 @@ namespace Y360Management {
                 o.email.ToLower().Contains(Filter.ToLower())
                 ).ToList();
             }
-            WriteObject(result);
+            WriteObject(result, true);
             base.EndProcessing();
         }
     }

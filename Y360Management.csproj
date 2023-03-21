@@ -17,6 +17,9 @@
     <None Update="install.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Y360Management.format.ps1xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Y360Management.psd1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
