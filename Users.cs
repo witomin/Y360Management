@@ -8,7 +8,7 @@ namespace Y360Management {
     /// <summary>
     /// Получить информацию о сотрудниках
     /// </summary>
-    [Cmdlet(VerbsCommon.Get, "Users"), OutputType(typeof(List<User>))]
+    [Cmdlet(VerbsCommon.Get, "Users", HelpUri = "https://github.com/witomin/Y360Management#get-users---получить-информацию-о-сотрудниках"), OutputType(typeof(List<User>))]
     public class GetUsersCmdlet : PSCmdlet {
         /// <summary>
         /// Параметр Identity определяет пользователя, которого требуется просмотреть.
@@ -99,7 +99,7 @@ namespace Y360Management {
     /// <summary>
     /// Изменить информацию о сотруднике
     /// </summary>
-    [Cmdlet(VerbsCommon.Set, "User"), OutputType(typeof(List<User>))]
+    [Cmdlet(VerbsCommon.Set, "User", HelpUri = "https://github.com/witomin/Y360Management#set-user---изменить-информацию-о-сотруднике"), OutputType(typeof(List<User>))]
     public class SetUserCmdlet : PSCmdlet {
         /// <summary>
         /// Обязательный параметр Identity определяет пользователя, который требуется изменить
@@ -266,7 +266,7 @@ namespace Y360Management {
     /// <summary>
     /// Создать сотрудника
     /// </summary>
-    [Cmdlet(VerbsCommon.New, "User"), OutputType(typeof(User))]
+    [Cmdlet(VerbsCommon.New, "User", HelpUri = "https://github.com/witomin/Y360Management#new-user---создать-сотрудника"), OutputType(typeof(User))]
     public class NewUserCmdlet : PSCmdlet {
         /// <summary>
         /// Логин сотрудника
@@ -376,7 +376,7 @@ namespace Y360Management {
     /// <summary>
     /// Просмотреть статус 2FA сотрудника
     /// </summary>
-    [Cmdlet(VerbsCommon.Get, "Status2FAUser"), OutputType(typeof(bool))]
+    [Cmdlet(VerbsCommon.Get, "Status2FAUser", HelpUri = "https://github.com/witomin/Y360Management#get-status2fauser---просмотреть-статус-2fa-сотрудника"), OutputType(typeof(bool))]
     public class GetStatus2FAUserCmdlet : PSCmdlet {
         /// <summary>
         /// Параметр Identity определяет пользователя, который требуется просмотреть.

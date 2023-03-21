@@ -8,7 +8,7 @@ namespace Y360Management {
     /// <summary>
     /// Получить информацию о подразделениях
     /// </summary>
-    [Cmdlet(VerbsCommon.Get, "Departments"), OutputType(typeof(List<Department>))]
+    [Cmdlet(VerbsCommon.Get, "Departments", HelpUri = "https://github.com/witomin/Y360Management#get-departments---получение-информации-о--подразделениях"), OutputType(typeof(List<Department>))]
     public class GetDepartmentsCmdlet : PSCmdlet {
         /// <summary>
         /// Параметр Identity определяет подразделение, которое требуется просмотреть.
@@ -42,7 +42,7 @@ namespace Y360Management {
     /// <summary>
     /// Изменить параметры подразделения
     /// </summary>
-    [Cmdlet(VerbsCommon.Set, "Department"), OutputType(typeof(Department))]
+    [Cmdlet(VerbsCommon.Set, "Department", HelpUri = "https://github.com/witomin/Y360Management#set-department---изменить-информацию-о--подразделении"), OutputType(typeof(Department))]
     public class SetDepartmentCmdlet : PSCmdlet {
         /// <summary>
         /// Обязательный параметр Identity определяет подразделение, которое требуется изменить.
@@ -145,7 +145,7 @@ namespace Y360Management {
     /// <summary>
     /// Удалить подразделение
     /// </summary>
-    [Cmdlet(VerbsCommon.Remove, "Department")]
+    [Cmdlet(VerbsCommon.Remove, "Department", HelpUri = "https://github.com/witomin/Y360Management#remove-department---удалить-подразделение")]
     public class RemoveDepartmentCmdlet : PSCmdlet {
         /// <summary>
         /// Обязательный параметр Identity определяет подразделение, которое требуется удалить.
@@ -168,7 +168,7 @@ namespace Y360Management {
     /// <summary>
     /// Создать подразделение
     /// </summary>
-    [Cmdlet(VerbsCommon.New, "Department"), OutputType(typeof(Department))]
+    [Cmdlet(VerbsCommon.New, "Department", HelpUri = "https://github.com/witomin/Y360Management#new-department---создать-подразделение"), OutputType(typeof(Department))]
     public class NewDepartmentCmdlet : PSCmdlet {
         /// <summary>
         /// Обязательный параметр название подразделения

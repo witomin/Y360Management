@@ -8,7 +8,7 @@ namespace Y360Management {
     /// <summary>
     /// Получить список разрешенных IP-адресов и CIDR-подсетей.
     /// </summary>
-    [Cmdlet(VerbsCommon.Get, "AllowList"), OutputType(typeof(List<string>))]
+    [Cmdlet(VerbsCommon.Get, "AllowList", HelpUri = "https://github.com/witomin/Y360Management#get-allowlist---получить-информацию-о-белом-списке"), OutputType(typeof(List<string>))]
     public class GetAllowListCmdlet : PSCmdlet {
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
@@ -20,7 +20,7 @@ namespace Y360Management {
     /// <summary>
     /// Задать список разрешенных IP-адресов и CIDR-подсетей.
     /// </summary>
-    [Cmdlet(VerbsCommon.Set, "AllowList")]
+    [Cmdlet(VerbsCommon.Set, "AllowList", HelpUri = "https://github.com/witomin/Y360Management#set-allowlist---редактировать-белый-список")]
     public class SetAllowListCmdlet : PSCmdlet {
         /// <summary>
         /// Управление списком разрешенных IP-адресов и CIDR-подсетей
@@ -62,7 +62,7 @@ namespace Y360Management {
     /// <summary>
     /// Удалить список разрешенных IP-адресов и CIDR-подсетей.
     /// </summary>
-    [Cmdlet(VerbsCommon.Remove, "AllowList")]
+    [Cmdlet(VerbsCommon.Remove, "AllowList", HelpUri = "https://github.com/witomin/Y360Management#remove-allowlist---удалить-белый-список")]
     public class RemoveAllowListCmdlet : PSCmdlet {
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);

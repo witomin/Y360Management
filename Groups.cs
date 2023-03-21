@@ -8,7 +8,7 @@ namespace Y360Management {
     /// <summary>
     /// Получить информацию о группах
     /// </summary>
-    [Cmdlet(VerbsCommon.Get, "Groups"), OutputType(typeof(List<Group>))]
+    [Cmdlet(VerbsCommon.Get, "Groups", HelpUri = "https://github.com/witomin/Y360Management#get-groups---получение-информации-о-группах"), OutputType(typeof(List<Group>))]
     public class GetGroupsCmdlet : PSCmdlet {
         /// <summary>
         /// Параметр Identity определяет группу, которую требуется просмотреть.
@@ -43,7 +43,7 @@ namespace Y360Management {
     /// <summary>
     /// Получить участников группы
     /// </summary>
-    [Cmdlet(VerbsCommon.Get, "GroupMembers"), OutputType(typeof(MembersList))]
+    [Cmdlet(VerbsCommon.Get, "GroupMembers", HelpUri = "https://github.com/witomin/Y360Management#get-groupmembers---получение-информации-об-участниках-группы"), OutputType(typeof(MembersList))]
     public class GetGroupMembersCmdlet : PSCmdlet {
         /// <summary>
         /// Обязательный параметр Identity определяет группу, которую требуется просмотреть.
@@ -69,7 +69,7 @@ namespace Y360Management {
     /// <summary>
     /// Создать новую группу.
     /// </summary>
-    [Cmdlet(VerbsCommon.New, "Group"), OutputType(typeof(Group))]
+    [Cmdlet(VerbsCommon.New, "Group", HelpUri = "https://github.com/witomin/Y360Management#new-group---создать-новую-группу"), OutputType(typeof(Group))]
     public class NewGroupCmdlet : PSCmdlet {
         /// <summary>
         /// Обязательный параметр Название группы
@@ -124,7 +124,7 @@ namespace Y360Management {
     /// <summary>
     /// Управлять группами
     /// </summary>
-    [Cmdlet(VerbsCommon.Set, "Group"), OutputType(typeof(Group))]
+    [Cmdlet(VerbsCommon.Set, "Group", HelpUri = "https://github.com/witomin/Y360Management#set-group---изменить-параметры-группы"), OutputType(typeof(Group))]
     public class SetGroupCmdlet : PSCmdlet {
         /// <summary>
         /// Обязательный параметр Identity определяет группу, которую требуется просмотреть.
@@ -240,7 +240,7 @@ namespace Y360Management {
             base.EndProcessing();
         }
     }
-    [Cmdlet(VerbsCommon.Remove, "Group")]
+    [Cmdlet(VerbsCommon.Remove, "Group", HelpUri = "https://github.com/witomin/Y360Management#remove-group---удалить-группу")]
     public class RemoveGroupCmdlet : PSCmdlet {
         /// <summary>
         /// Параметр Identity определяет группу, которую требуется просмотреть.

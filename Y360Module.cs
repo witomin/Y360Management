@@ -5,7 +5,7 @@ namespace Y360Management {
     /// <summary>
     /// Подключиться к сервису Y360
     /// </summary>
-    [Cmdlet("Connect", "Y360"), OutputType(typeof(Client))]
+    [Cmdlet("Connect", "Y360", HelpUri = "https://github.com/witomin/Y360Management#connect-y360---подключиться-к-api-яндекс-360"), OutputType(typeof(Client))]
     public class ConnectY360Cmdlet : PSCmdlet {
         /// <summary>
         /// Обязательный параметр идентификатор организации

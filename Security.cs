@@ -5,7 +5,7 @@ namespace Y360Management {
     /// <summary>
     /// Возвращает статус обязательной двухфакторной аутентификации (2FA) для пользователей домена.
     /// </summary>
-    [Cmdlet(VerbsCommon.Get, "Status2FA"), OutputType(typeof(DomainStatus2FA))]
+    [Cmdlet(VerbsCommon.Get, "Status2FA", HelpUri = "https://github.com/witomin/Y360Management#get-status2fa---получить-статус-2fa"), OutputType(typeof(DomainStatus2FA))]
     public class GetStatus2FaCmdlet : PSCmdlet {
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
