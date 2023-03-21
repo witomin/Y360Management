@@ -105,5 +105,46 @@
         </TableRowEntries>
       </TableControl>
     </View>
+
+    <View>
+      <Name>Yandex.API360.Models.Group</Name>
+      <ViewSelectedBy>
+        <TypeName>Yandex.API360.Models.Group</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>id</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>type</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>email</Label>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>name</Label>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>id</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>type</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>email</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>name</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
   </ViewDefinitions>
 </Configuration>
