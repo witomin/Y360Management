@@ -36,7 +36,7 @@ namespace Y360Management {
                 g.description.ToLower().Contains(Filter.ToLower())
                 ).ToList();
             }
-            WriteObject(result);
+            WriteObject(result, true);
             base.EndProcessing();
         }
     }
@@ -240,7 +240,7 @@ namespace Y360Management {
             base.EndProcessing();
         }
     }
-    [Cmdlet(VerbsCommon.Remove, "Group"), OutputType(typeof(List<Group>))]
+    [Cmdlet(VerbsCommon.Remove, "Group")]
     public class RemoveGroupCmdlet : PSCmdlet {
         /// <summary>
         /// Параметр Identity определяет группу, которую требуется просмотреть.

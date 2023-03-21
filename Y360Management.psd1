@@ -12,7 +12,7 @@
 RootModule = 'Y360Management.dll'
 
 # Version number of this module.
-ModuleVersion = '0.3.0'
+ModuleVersion = '0.3.2'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()

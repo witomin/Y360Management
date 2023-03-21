@@ -92,7 +92,7 @@ namespace Y360Management {
             if (ResultSize != null) {
                 result = result.Take((int)ResultSize).ToList();
             }
-            WriteObject(result);
+            WriteObject(result, true);
             base.EndProcessing();
         }
     }
@@ -259,14 +259,14 @@ namespace Y360Management {
                 var res = APIClient.DeleteContactsFromUserAsync(user.id).Result;
             }
             var result = APIClient.EditUserAsync(userEdit).Result;
-            WriteObject(result);
+            WriteObject(result, true);
             base.EndProcessing();
         }
     }
     /// <summary>
     /// Создать сотрудника
     /// </summary>
-    [Cmdlet(VerbsCommon.New, "User"), OutputType(typeof(List<User>))]
+    [Cmdlet(VerbsCommon.New, "User"), OutputType(typeof(User))]
     public class NewUserCmdlet : PSCmdlet {
         /// <summary>
         /// Логин сотрудника

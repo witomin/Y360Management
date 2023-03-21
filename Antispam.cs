@@ -13,7 +13,7 @@ namespace Y360Management {
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
             List<string> result = APIClient.GetAllowListAsync().Result;
-            WriteObject(result);
+            WriteObject(result, true);
             base.EndProcessing();
         }
     }

@@ -35,7 +35,7 @@ namespace Y360Management {
                 d.description.ToLower().Contains(Filter.ToLower())
                 ).ToList();
             }
-            WriteObject(Departments);
+            WriteObject(Departments, true);
             base.EndProcessing();
         }
     }
