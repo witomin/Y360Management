@@ -31,7 +31,7 @@
                 <PropertyName>email</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <ScriptBlock>[string] $_.name.last +" "+ $_.name.first +" "+ $_.name.middle</ScriptBlock>
+                <PropertyName>name</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>position</PropertyName>
