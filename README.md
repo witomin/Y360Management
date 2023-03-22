@@ -2,6 +2,8 @@
 Модуль PowerShell для управления структурой организации Яндекс 360 для бизнеса
 На основе библиотеки [Yandex.API360](https://github.com/witomin/Yandex.API360).
 
+Примеры скриптов можно посмотреть в папке [Examples of scripts] (https://github.com/witomin/Y360Management/tree/master/Examples%20of%20scripts)
+
 ## Командлеты:
 
 ### **Connect-Y360** - подключиться к API Яндекс 360
