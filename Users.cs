@@ -57,7 +57,7 @@ namespace Y360Management {
         public int? ResultSize { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            List<User> result = APIClient.GetAllUsersAsync().Result;
+            List<User> result = APIClient.GetAllUsersAsync().GetAwaiter().GetResult();
             if (Identity != null) {
                 result = result.Where(u => u.id.ToString().Equals(Identity) ||
                 u.nickname.ToLower().Equals(Identity.ToLower()) ||
@@ -202,7 +202,7 @@ namespace Y360Management {
         //public SwitchParameter ChangePassword { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            var allUsers = APIClient.GetAllUsersAsync().Result;
+            var allUsers = APIClient.GetAllUsersAsync().GetAwaiter().GetResult();
             var user = allUsers.SingleOrDefault(u => u.id.ToString().Equals(Identity) ||
             u.nickname.ToLower().Equals(Identity.ToLower()) ||
             u.email.ToLower().Equals(Identity.ToLower()));
@@ -243,22 +243,22 @@ namespace Y360Management {
                 if (Aliases.Add != null) {
                     foreach (var alias in Aliases.Add) {
                         if (!user.aliases.Contains(alias)) {
-                            var res = APIClient.AddAliasToUserAsync(user.id, alias).Result;
+                            var res = APIClient.AddAliasToUserAsync(user.id, alias).GetAwaiter().GetResult();
                         }
                     }
                 }
                 if (Aliases.Remove != null) {
                     foreach (var alias in Aliases.Remove) {
                         if (user.aliases.Contains(alias)) {
-                            var res = APIClient.DeleteAliasFromUserAsync(user.id, alias).Result;
+                            var res = APIClient.DeleteAliasFromUserAsync(user.id, alias).GetAwaiter().GetResult();
                         }
                     }
                 }
             }
             if (Contacts?.Count == 0) {
-                var res = APIClient.DeleteContactsFromUserAsync(user.id).Result;
+                var res = APIClient.DeleteContactsFromUserAsync(user.id).GetAwaiter().GetResult();
             }
-            var result = APIClient.EditUserAsync(userEdit).Result;
+            var result = APIClient.EditUserAsync(userEdit).GetAwaiter().GetResult();
             WriteObject(result, true);
             base.EndProcessing();
         }
@@ -368,7 +368,7 @@ namespace Y360Management {
                 position = Position,
                 timezone = Timezone
             };
-            var result = APIClient.AddUserAsync(userEdit).Result;
+            var result = APIClient.AddUserAsync(userEdit).GetAwaiter().GetResult();
             WriteObject(result);
             base.EndProcessing();
         }
@@ -389,12 +389,12 @@ namespace Y360Management {
         public string? Identity { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            var allUsers = APIClient.GetAllUsersAsync().Result;
+            var allUsers = APIClient.GetAllUsersAsync().GetAwaiter().GetResult();
             var user = allUsers.SingleOrDefault(u => u.id.ToString().Equals(Identity) ||
             u.nickname.ToLower().Equals(Identity.ToLower()) ||
             u.email.ToLower().Equals(Identity.ToLower()));
             if (user != null) {
-                var result = APIClient.GetStatus2FAUserAsync(user.id).Result;
+                var result = APIClient.GetStatus2FAUserAsync(user.id).GetAwaiter().GetResult();
                 WriteObject(result);
             }
             base.EndProcessing();

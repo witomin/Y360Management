@@ -16,7 +16,7 @@ namespace Y360Management {
         public string? Filter { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            List<Organization> result = APIClient.GetAllOrganizationsAsync().Result;
+            List<Organization> result = APIClient.GetAllOrganizationsAsync().GetAwaiter().GetResult();
             if (Filter != null) {
                 result = result.Where(o => o.name.ToLower().Contains(Filter.ToLower()) ||
                 o.email.ToLower().Contains(Filter.ToLower())

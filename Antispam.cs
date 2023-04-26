@@ -12,7 +12,7 @@ namespace Y360Management {
     public class GetAllowListCmdlet : PSCmdlet {
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            List<string> result = APIClient.GetAllowListAsync().Result;
+            List<string> result = APIClient.GetAllowListAsync().GetAwaiter().GetResult();
             WriteObject(result, true);
             base.EndProcessing();
         }
@@ -35,7 +35,7 @@ namespace Y360Management {
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
             if (Items != null) {
-                var allowList = APIClient.GetAllowListAsync().Result;
+                var allowList = APIClient.GetAllowListAsync().GetAwaiter().GetResult();
                 Thread.Sleep(1000);
                 if (Items.Add != null) {
                     allowList.AddRange(Items.Add);
@@ -45,15 +45,15 @@ namespace Y360Management {
                     allowList = allowList.Where(i => !Items.Remove.Contains(i)).ToList();
                 }
                 if (allowList.Count == 0) {
-                    var result = APIClient.DeleteAllowListAsync().Result;
+                    var result = APIClient.DeleteAllowListAsync().GetAwaiter().GetResult();
                 }
                 else {
-                    var result = APIClient.SetAllowListAsync(allowList).Result;
+                    var result = APIClient.SetAllowListAsync(allowList).GetAwaiter().GetResult();
                 }
             }
             else 
                 if (AllowList != null) {
-                var result = APIClient.SetAllowListAsync(AllowList).Result;
+                var result = APIClient.SetAllowListAsync(AllowList).GetAwaiter().GetResult();
             }
             base.EndProcessing();
         }
@@ -66,7 +66,7 @@ namespace Y360Management {
     public class RemoveAllowListCmdlet : PSCmdlet {
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            var result = APIClient.DeleteAllowListAsync().Result;
+            var result = APIClient.DeleteAllowListAsync().GetAwaiter().GetResult();
             base.EndProcessing();
         }
     }

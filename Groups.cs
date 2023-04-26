@@ -26,7 +26,7 @@ namespace Y360Management {
         public string? Filter { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            List<Group> result = APIClient.GetAllGroupsAsync().Result;
+            List<Group> result = APIClient.GetAllGroupsAsync().GetAwaiter().GetResult();
             if (Identity != null) {
                 result = result.Where(g => g.id.ToString().Equals(Identity) || g.name.ToLower().Equals(Identity.ToLower()) || g.email.ToLower().Equals(Identity.ToLower())).ToList();
             }
@@ -56,11 +56,11 @@ namespace Y360Management {
         public string Identity { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            List<Group> groups = APIClient.GetAllGroupsAsync().Result;
+            List<Group> groups = APIClient.GetAllGroupsAsync().GetAwaiter().GetResult();
             Group group = groups.SingleOrDefault(u => u.id.ToString().Equals(Identity) || u.name.ToLower().Equals(Identity.ToLower()) || u.email.ToLower().Equals(Identity.ToLower()));
             MembersList result = null;
             if (group != null) {
-                result = APIClient.GetGroupMembersAsync(group.id).Result;
+                result = APIClient.GetGroupMembersAsync(group.id).GetAwaiter().GetResult();
             }
             WriteObject(result);
             base.EndProcessing();
@@ -104,9 +104,9 @@ namespace Y360Management {
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
             if (Members != null || Admins!=null) {
-                Helpers.allUsers = APIClient.GetAllUsersAsync().Result;
-                Helpers.allGroups = APIClient.GetAllGroupsAsync().Result;
-                Helpers.allDepartments = APIClient.GetAllDepartmentsAsync().Result;
+                Helpers.allUsers = APIClient.GetAllUsersAsync().GetAwaiter().GetResult();
+                Helpers.allGroups = APIClient.GetAllGroupsAsync().GetAwaiter().GetResult();
+                Helpers.allDepartments = APIClient.GetAllDepartmentsAsync().GetAwaiter().GetResult();
             }
             BaseGroup newGroup = new BaseGroup {
                 adminIds = Admins is null ? null : Helpers.GetMembersByIdentityList(Admins).Select(a=>a.id).ToList(),
@@ -116,7 +116,7 @@ namespace Y360Management {
                 name = Name,
                 members = Members is null ? null : Helpers.GetMembersByIdentityList(Members)
             };
-            var result = APIClient.AddGroupAsync(newGroup).Result;
+            var result = APIClient.AddGroupAsync(newGroup).GetAwaiter().GetResult();
             WriteObject(result);
             base.EndProcessing();
         }
@@ -172,15 +172,15 @@ namespace Y360Management {
         public List<string>? AdminList { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            Helpers.allGroups = APIClient.GetAllGroupsAsync().Result;
+            Helpers.allGroups = APIClient.GetAllGroupsAsync().GetAwaiter().GetResult();
             Group group = Helpers.allGroups.SingleOrDefault(u => u.id.ToString().Equals(Identity) || u.name.ToLower().Equals(Identity.ToLower()) || u.email.ToLower().Equals(Identity.ToLower()));
             if (group == null) {
                 base.EndProcessing();
                 return;
             }
             if (Members != null || MemberList != null || Admins != null || AdminList != null) {
-                Helpers.allUsers = APIClient.GetAllUsersAsync().Result;
-                Helpers.allDepartments = APIClient.GetAllDepartmentsAsync().Result;
+                Helpers.allUsers = APIClient.GetAllUsersAsync().GetAwaiter().GetResult();
+                Helpers.allDepartments = APIClient.GetAllDepartmentsAsync().GetAwaiter().GetResult();
             }
             if (Name != null) group.name = Name;
             if (Description != null) group.description = Description;
@@ -189,7 +189,7 @@ namespace Y360Management {
             if (MemberList != null) {
                 group.members = Helpers.GetMembersByIdentityList(MemberList);
                 if (group.members.Count == 0) {
-                    var res = APIClient.DeleteAllMembersFromGroupAsync(group.id).Result;
+                    var res = APIClient.DeleteAllMembersFromGroupAsync(group.id).GetAwaiter().GetResult();
                     group.members = null;
                 }
             }
@@ -201,13 +201,13 @@ namespace Y360Management {
                 if (Members.Remove != null) {
                     var removable = Helpers.GetMembersByIdentityList(Members.Remove);
                     if (removable.Count == 1) {
-                        var res = APIClient.DeleteMemberFromGroupAsync(group.id, removable[0]).Result;
+                        var res = APIClient.DeleteMemberFromGroupAsync(group.id, removable[0]).GetAwaiter().GetResult();
                         group.members = null;
                     }
                     else {
                         group.members = group.members.Where(m => !removable.Select(m => m.id).Contains(m.id)).ToList();
                         if (group.members.Count == 0) {
-                            var res = APIClient.DeleteAllMembersFromGroupAsync(group.id).Result;
+                            var res = APIClient.DeleteAllMembersFromGroupAsync(group.id).GetAwaiter().GetResult();
                             group.members = null;
                         }
                     }
@@ -216,7 +216,7 @@ namespace Y360Management {
             if (AdminList != null) {
                 group.adminIds = AdminList is null ? null : Helpers.GetMembersByIdentityList(AdminList).Select(a => a.id).ToList();
                 if (group.adminIds.Count == 0) {
-                    var res = APIClient.DeleteAllManagersFromGroupAsync(group.id).Result;
+                    var res = APIClient.DeleteAllManagersFromGroupAsync(group.id).GetAwaiter().GetResult();
                     group.adminIds = null;
                 }
             }
@@ -229,12 +229,12 @@ namespace Y360Management {
                     var removable = Helpers.GetMembersByIdentityList(Admins.Remove).Select(a=>a.id);
                     group.adminIds = group.adminIds.Where(m => !removable.Contains(m)).ToList();
                     if (group.adminIds.Count==0) {
-                        var res = APIClient.DeleteAllManagersFromGroupAsync(group.id).Result;
+                        var res = APIClient.DeleteAllManagersFromGroupAsync(group.id).GetAwaiter().GetResult();
                         group.adminIds = null;
                     }
                 }
             }
-            var result = APIClient.EditGroupAsync(group).Result;
+            var result = APIClient.EditGroupAsync(group).GetAwaiter().GetResult();
             WriteObject(result);
 
             base.EndProcessing();
@@ -253,9 +253,9 @@ namespace Y360Management {
         public string Identity { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            List<Group> allGroups = APIClient.GetAllGroupsAsync().Result;
+            List<Group> allGroups = APIClient.GetAllGroupsAsync().GetAwaiter().GetResult();
             Group group = allGroups.SingleOrDefault(u => u.id.ToString().Equals(Identity) || u.name.ToLower().Equals(Identity.ToLower()) || u.email.ToLower().Equals(Identity.ToLower()));
-            var res = APIClient.DeleteGroupAsync(group.id).Result;
+            var res = APIClient.DeleteGroupAsync(group.id).GetAwaiter().GetResult();
             base.EndProcessing();
         }
     }

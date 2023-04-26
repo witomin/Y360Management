@@ -11,7 +11,7 @@ namespace Y360Management {
     public class GetRulesCmdlet : PSCmdlet {
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            List<Rule> result = APIClient.GetRulesAsync().Result;
+            List<Rule> result = APIClient.GetRulesAsync().GetAwaiter().GetResult();
             WriteObject(result, true);
             base.EndProcessing();
         }
@@ -44,7 +44,7 @@ namespace Y360Management {
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
             var RuleList = new RulesList {
-                rules = APIClient.GetRulesAsync().Result
+                rules = APIClient.GetRulesAsync().GetAwaiter().GetResult()
             };
             var newRule = new Rule {
                 actions = Actions,
@@ -55,7 +55,7 @@ namespace Y360Management {
                 terminal = Terminal
             };
             RuleList.rules.Add(newRule);
-            List<Rule> result = APIClient.SetRulesAsync(RuleList).Result;
+            List<Rule> result = APIClient.SetRulesAsync(RuleList).GetAwaiter().GetResult();
             base.EndProcessing();
         }
     }

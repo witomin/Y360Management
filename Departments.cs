@@ -25,7 +25,7 @@ namespace Y360Management {
         public string? Filter { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            List<Department> Departments = APIClient.GetAllDepartmentsAsync().Result;
+            List<Department> Departments = APIClient.GetAllDepartmentsAsync().GetAwaiter().GetResult();
             if (Identity != null) {
                 Departments = Departments.Where(d => d.id.ToString().Equals(Identity) || d.email.ToLower().Equals(Identity.ToLower())).ToList();
             }
@@ -94,7 +94,7 @@ namespace Y360Management {
         public List<string>? AliasList { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            List<Department> allDepartments = APIClient.GetAllDepartmentsAsync().Result;
+            List<Department> allDepartments = APIClient.GetAllDepartmentsAsync().GetAwaiter().GetResult();
             Department department = allDepartments.SingleOrDefault(u => u.id.ToString().Equals(Identity) || u.email.ToLower().Equals(Identity.ToLower()));
             if (department is null) {
                 base.EndProcessing();
@@ -103,7 +103,7 @@ namespace Y360Management {
             if (Description != null) department.description = Description;
             if (ExternalId != null) department.externalId = ExternalId;
             if (Head != null) {
-                var allUsers = APIClient.GetAllUsersAsync().Result;
+                var allUsers = APIClient.GetAllUsersAsync().GetAwaiter().GetResult();
                 department.headId = allUsers.SingleOrDefault(u => u.id.ToString().Equals(Head) || u.nickname.Equals(Head) || u.email.Equals(Head)).id;
             }
             if (Label != null) department.label = Label;
@@ -115,14 +115,14 @@ namespace Y360Management {
                 if (Aliases.Add != null) {
                     foreach (var alias in Aliases.Add) {
                         if (!department.aliases.Contains(alias)) {
-                            var result = APIClient.AddAliasToDepartmentAsync(department.id, alias).Result;
+                            var result = APIClient.AddAliasToDepartmentAsync(department.id, alias).GetAwaiter().GetResult();
                         }
                     }
                 }
                 if (Aliases.Remove != null) {
                     foreach (var alias in Aliases.Remove) {
                         if (department.aliases.Contains(alias)) {
-                            var result = APIClient.DeleteAliasFromDepartmentAsync(department.id, alias).Result;
+                            var result = APIClient.DeleteAliasFromDepartmentAsync(department.id, alias).GetAwaiter().GetResult();
                         }
                     }
                 }
@@ -131,13 +131,13 @@ namespace Y360Management {
                 var add = AliasList.Where(a => !department.aliases.Contains(a));
                 var remove = department.aliases.Where(a => !AliasList.Contains(a));
                 foreach (var alias in add) {
-                    var result = APIClient.AddAliasToDepartmentAsync(department.id, alias).Result;
+                    var result = APIClient.AddAliasToDepartmentAsync(department.id, alias).GetAwaiter().GetResult();
                 }
                 foreach (var alias in remove) {
-                    var result = APIClient.DeleteAliasFromDepartmentAsync(department.id, alias).Result;
+                    var result = APIClient.DeleteAliasFromDepartmentAsync(department.id, alias).GetAwaiter().GetResult();
                 }
             }
-            var res = APIClient.EditDepartmentAsync(department).Result;
+            var res = APIClient.EditDepartmentAsync(department).GetAwaiter().GetResult();
             WriteObject(department);
             base.EndProcessing();
         }
@@ -157,10 +157,10 @@ namespace Y360Management {
         public string Identity { get; set; }
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            List<Department> allDepartments = APIClient.GetAllDepartmentsAsync().Result;
+            List<Department> allDepartments = APIClient.GetAllDepartmentsAsync().GetAwaiter().GetResult();
             var department = allDepartments.SingleOrDefault(u => u.id.ToString().Equals(Identity) || u.email.ToLower().Equals(Identity.ToLower()));
             if (department != null) {
-                var res = APIClient.DeleteDepartmentAsync(department.id).Result;
+                var res = APIClient.DeleteDepartmentAsync(department.id).GetAwaiter().GetResult();
             }
             base.EndProcessing();
         }
@@ -209,15 +209,15 @@ namespace Y360Management {
                 label = Label,
             };
             if (Head != null) {
-                var allUsers = APIClient.GetAllUsersAsync().Result;
+                var allUsers = APIClient.GetAllUsersAsync().GetAwaiter().GetResult();
                 department.headId = allUsers.SingleOrDefault(u => u.id.ToString().Equals(Head) || u.nickname.Equals(Head) || u.email.Equals(Head)).id;
             }
 
             if (Parent != null) {
-                List<Department> allDepartments = APIClient.GetAllDepartmentsAsync().Result;
+                List<Department> allDepartments = APIClient.GetAllDepartmentsAsync().GetAwaiter().GetResult();
                 department.parentId = allDepartments.SingleOrDefault(d => d.id.ToString().Equals(Parent) || d.email.Equals(Parent)).id;
             }
-            var result = APIClient.AddDepartmentAsync(department).Result;
+            var result = APIClient.AddDepartmentAsync(department).GetAwaiter().GetResult();
             WriteObject(result);
             base.EndProcessing();
         }

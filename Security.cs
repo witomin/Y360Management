@@ -9,7 +9,7 @@ namespace Y360Management {
     public class GetStatus2FaCmdlet : PSCmdlet {
         protected override void EndProcessing() {
             var APIClient = Helpers.GetApiClient(this);
-            DomainStatus2FA result = APIClient.GetStatus2faAsync().Result;
+            DomainStatus2FA result = APIClient.GetStatus2faAsync().GetAwaiter().GetResult();
             WriteObject(result);
             base.EndProcessing();
         }
@@ -39,11 +39,11 @@ namespace Y360Management {
             var APIClient = Helpers.GetApiClient(this);
             DomainStatus2FA result;
             if (Duration != null) {
-                result = APIClient.Enable2faAsync(new EnableDomainStatus2FA { duration = (int)Duration, logoutUsers = LogoutUsers}).Result; 
+                result = APIClient.Enable2faAsync(new EnableDomainStatus2FA { duration = (int)Duration, logoutUsers = LogoutUsers}).GetAwaiter().GetResult(); 
             }
             else 
             if (Disable) {
-                result = APIClient.Disable2faAsync().Result;
+                result = APIClient.Disable2faAsync().GetAwaiter().GetResult();
             }
             base.EndProcessing();
         }
